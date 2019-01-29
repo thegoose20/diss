@@ -1,0 +1,46 @@
+/*
+Stylesheet for the Musical Instruments Timeline
+*/
+
+
+* {
+  shape-rendering: crispEdges;
+}
+html{
+  background-color: #FFFFFF; /*c4c4c4;*/
+  margin: 20px;
+  padding: 0px;
+}
+body {
+  max-height: 100%;
+}
+
+/* TEXT
+    Fonts:
+      font-family: 'Pompiere', cursive;
+      font-family: 'Roboto', sans-serif;
+      font-family: 'Open Sans', sans-serif;
+*/
+h1{
+  font-family: 'Roboto', cursive;
+  font-size: 42px;
+  color: black;
+}
+h2{
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 100;
+  color: black;
+  padding-bottom: 20px;
+}
+footer{
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 100;
+  color: black;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+
+/* TIMELINE */
