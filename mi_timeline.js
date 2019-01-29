@@ -36,14 +36,14 @@ function callFunction() {
       .row(function(d){ return{ Id:d.Id,
                                 Collection:d.Collection,
                                 Type:d.Type,
-                                // genus:d.Genus,
-                                // family:d.Family,
-                                Year_Early:d.Year_Early//,
-                                // year_late:d.Year_Late,
-                                // year_uncertainty:year_uncertainty,
-                                // country:d.Country,
-                                // city:d.City,
-                                // location_uncertainty:d.Location_Uncertainty
+                                Genus:d.Genus,
+                                Family:d.Family,
+                                Year_Early:d.Year_Early,
+                                Year_Late:d.Year_Late,
+                                Year_Uncertainty:d.Year_Uncertainty,
+                                Country:d.Country,
+                                City:d.City,
+                                Location_Uncertainty:d.Location_Uncertainty
                               }; })
       .get(function(error,data){
           //console.log(data);
@@ -103,12 +103,17 @@ function callFunction() {
           // Calculate the width of each item visualized in the display space
           var yearsCovered = (+maxYear)-(+minYear);
           maxI = yrList.length-1;
-          var itemWidth = width/yearsCovered-2;//20;//width/(maxYear-minYear)-2;                          // add 2 pixels of padding between visualized items
+          var itemWidth = width/yearsCovered-2;                          // add 2 pixels of padding between visualized items
 
           // Define the full timeline chart SVG element
           var svg = d3.select("body").select("#chart").append("svg")
               .attr("height", height + margin.top + margin.bottom)
               .attr("width", width + margin.left + margin.right);
+
+          // Define the tooltip
+          var div = d3.select("body").append("div")
+              .attr("class", "tooltip")
+              .style("opacity", 0);
 
           // yrCounts = [];
           for (i = 0; i < yrList.length; i++){
@@ -128,10 +133,23 @@ function callFunction() {
                 .attr("value",function(d){ return d.Year_Early; })
                 .attr("fill","black")
                 .attr("stroke","black")
-                .attr("x", function(d){ return x(parseYear(d.Year_Early)) - (itemWidth/2) + (margin.left*2); })
+                .attr("x", function(d){ return x(parseYear(d.Year_Early)) - (itemWidth/2) + 1; })
                 .attr("y",function(d,i){ return (height-xHeight-margin.bottom-(itemHeight)-((itemHeight)*(i*itemSpacing)))+"px"; })
                 .attr("width", itemWidth+"px")
-                .attr("height", itemHeight+"px");
+                .attr("height", itemHeight+"px")
+                .on("mouseover", function(d){
+                  div.transition()
+                    .duration(200)
+                    .style("opacity",.7);
+                  div.html("Type: " + d.Type + "<br/>" + "Genus: " + d.Genus + "<br/>" + "Family: " + d.Family + "<br/>" + "Year Estimate: " + d.Year_Early + "-" + d.Late_Year)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 64) + "px");
+                })
+                .on("mouseout", function(d){
+                  div.transition()
+                    .duration(500)
+                    .style("opacity",0);
+                });
           }
 
           /*

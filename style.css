@@ -8,7 +8,9 @@ Stylesheet for the Musical Instruments Timeline
 }
 html{
   background-color: #FFFFFF; /*c4c4c4;*/
-  margin: 20px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
   padding: 0px;
 }
 body {
@@ -41,6 +43,35 @@ footer{
   padding-top: 20px;
   padding-bottom: 20px;
 }
+button{
+  float: right;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
+  padding: 10px;
+  background-color: white;
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+}
+button:hover{
+  background-color: black;
+  color: white;
+}
 
 
 /* TIMELINE */
+div.tooltip{
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 100;
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: 64px;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border: 0px;
+}
