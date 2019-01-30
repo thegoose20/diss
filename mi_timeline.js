@@ -31,7 +31,7 @@ function callFunction() {
   console.log(width);
 
   // Load data
-  d3.csv("clean_mimed.csv")
+  d3.csv("clean_mimed_with_range.csv")
       // Create references to columns in data file
       .row(function(d){ return{ Id:d.Id,
                                 Collection:d.Collection,
@@ -43,7 +43,8 @@ function callFunction() {
                                 Year_Uncertainty:d.Year_Uncertainty,
                                 Country:d.Country,
                                 City:d.City,
-                                Location_Uncertainty:d.Location_Uncertainty
+                                Location_Uncertainty:d.Location_Uncertainty,
+                                Year_Range:d.Year_Range
                               }; })
       .get(function(error,data){
           //console.log(data);
@@ -57,7 +58,7 @@ function callFunction() {
           var years = d3.nest()
                // create an array of objects whose keys are years (sorted earliest to latest)...
                .key(function(d){ if (d.Year_Early > 0) return d.Year_Early; }).sortKeys(d3.ascending)  // Exclude unknown years (with value = 0)
-               // .sortValues(function(a,b){ return d3.descending(a.Dat, b.Dat); })
+               .sortValues(function(a,b){ return d3.descending(a.Year_Range, b.Year_Range); })
                // ...and whose values are an array of objects
                .entries(data);
 
@@ -100,9 +101,8 @@ function callFunction() {
                       .domain([parseYear(minYear),parseYear(maxYear)])  // data space
                       .range([margin.left,width]);                      // display space
 
-          // Calculate the width of each item visualized in the display space
+          // Calculate default width of each item visualized based on display space
           var yearsCovered = (+maxYear)-(+minYear);
-          maxI = yrList.length-1;
           var itemWidth = width/yearsCovered-2;                          // add 2 pixels of padding between visualized items
 
           // Define the full timeline chart SVG element
@@ -135,13 +135,14 @@ function callFunction() {
                 .attr("stroke","black")
                 .attr("x", function(d){ return x(parseYear(d.Year_Early)) - (itemWidth/2) + 1; })
                 .attr("y",function(d,i){ return (height-xHeight-margin.bottom-(itemHeight)-((itemHeight)*(i*itemSpacing)))+"px"; })
-                .attr("width", itemWidth+"px")
+                .attr("width", function(d) { return (itemWidth*d.Year_Range)+"px"; })
                 .attr("height", itemHeight+"px")
+                .attr("opacity",.7)
                 .on("mouseover", function(d){
                   div.transition()
                     .duration(200)
-                    .style("opacity",.7);
-                  div.html("Type: " + d.Type + "<br/>" + "Genus: " + d.Genus + "<br/>" + "Family: " + d.Family + "<br/>" + "Year Estimate: " + d.Year_Early + "-" + d.Late_Year)
+                    .style("opacity",.9);
+                  div.html("Type: " + d.Type + "<br/>" + "Genus: " + d.Genus + "<br/>" + "Family: " + d.Family + "<br/>" + "Year Estimate: " + d.Year_Early + "-" + d.Year_Late)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 64) + "px");
                 })
